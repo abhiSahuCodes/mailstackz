@@ -1,15 +1,19 @@
 {
-  "name": "server",
+  "name": "mailstackz-server",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write ."
   },
-  "keywords": [],
+  "keywords": ["email", "productivity", "ai", "gmail", "nodejs"],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
-  "description": "",
+  "description": "MailStackz Backend - Email productivity tool with AI",
   "dependencies": {
     "@google-cloud/local-auth": "^3.0.1",
     "cors": "^2.8.5",
@@ -22,5 +26,14 @@
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.13.2"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.14.1",
+    "eslint": "^9.24.0",
+    "eslint-config-prettier": "^10.1.2",
+    "eslint-plugin-prettier": "^5.2.6",
+    "nodemon": "^3.1.9",
+    "prettier": "^3.5.3"
   }
 }
