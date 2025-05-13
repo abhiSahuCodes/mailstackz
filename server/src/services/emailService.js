@@ -1,5 +1,6 @@
 const { google } = require('googleapis');
 const Email = require('../models/Email');
+const AIService = require('./aiService');
 
 class EmailService {
   constructor(accessToken) {
@@ -43,6 +44,7 @@ class EmailService {
       const { payload, snippet } = response.data;
       const headers = payload.headers;
 
+      // Inside processEmail method, update the emailData object:
       const emailData = {
         userId,
         messageId,
@@ -51,8 +53,23 @@ class EmailService {
         to: this.parseEmailAddresses(headers.find(h => h.name === 'To')?.value),
         date: new Date(headers.find(h => h.name === 'Date')?.value),
         snippet,
-        labels: response.data.labelIds || []
+        labels: response.data.labelIds || [],
+        category: await AIService.categorizeEmail(
+          headers.find(h => h.name === 'Subject')?.value || '',
+          snippet
+        ),
+        priority: await AIService.calculatePriority({
+          subject: headers.find(h => h.name === 'Subject')?.value || '',
+          date: new Date(headers.find(h => h.name === 'Date')?.value),
+          isRead: response.data.labelIds?.includes('UNREAD') || false
+        })
       };
+
+      // Update sender stats before calculating priority
+      await AIService.updateSenderStats(emailData);
+
+      // Calculate priority with enhanced logic
+      emailData.priority = await AIService.calculatePriority(emailData);
 
       return await Email.findOneAndUpdate(
         { messageId, userId },
@@ -63,20 +80,6 @@ class EmailService {
       console.error('Email processing error:', error);
       throw error;
     }
-  }
-
-  parseEmailAddress(header) {
-    if (!header) return { name: '', email: '' };
-    const match = header.match(/(?:"?([^"]*)"?\s)?(?:<?(.+@[^>]+)>?)/);
-    return {
-      name: match ? match[1] || '' : '',
-      email: match ? match[2] || '' : header
-    };
-  }
-
-  parseEmailAddresses(header) {
-    if (!header) return [];
-    return header.split(',').map(address => this.parseEmailAddress(address.trim()));
   }
 }
 

@@ -18,6 +18,10 @@ const userSchema = new mongoose.Schema({
   picture: String,
   accessToken: String,
   refreshToken: String,
+  tokenExpiresAt: {
+    type: Date,
+    default: new Date(Date.now() + 3600000)
+  },
   lastSync: Date,
   createdAt: {
     type: Date,

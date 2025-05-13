@@ -9,13 +9,20 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write ."
   },
-  "keywords": ["email", "productivity", "ai", "gmail", "nodejs"],
+  "keywords": [
+    "email",
+    "productivity",
+    "ai",
+    "gmail",
+    "nodejs"
+  ],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "description": "MailStackz Backend - Email productivity tool with AI",
   "dependencies": {
     "@google-cloud/local-auth": "^3.0.1",
+    "@google/generative-ai": "^0.24.1",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
@@ -25,7 +32,8 @@
     "googleapis": "^148.0.0",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.13.2"
+    "mongoose": "^8.13.2",
+    "winston": "^3.17.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.1",
